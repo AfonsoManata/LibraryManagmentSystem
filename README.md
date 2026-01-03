@@ -1,6 +1,22 @@
-# BCI Application
+# 📚 Library Management System (Java)
 
-## Estrutura do Repositório
+A **modular, extensible Library Management System** implemented in **Java**, designed with **object-oriented best practices** and multiple **design patterns**.  
+The system supports library operations such as **user management**, **work cataloging**, **borrowing/returning**, **notifications**, **rule enforcement**, and **advanced searching**, all through a clean separation between **core logic** and **user interface layers**.
+
+## ✨ Key Features
+
+- 📖 Manage different types of works (Books, DVDs, etc.)
+- 👤 User registration, behavior tracking, fines, and notifications
+- 🔄 Borrowing and returning workflows with rule validation
+- 🔍 Advanced search using the **Visitor pattern**
+- 🔔 Event-driven notifications for availability and requests
+- 🧱 Clean separation between **Application**, **Core Domain**, and **UI Library**
+- 🧪 Robust exception handling across all layers
+- 🧩 Highly extensible architecture
+
+## 🏗️ Architecture Overview
+
+The project follows a **layered architecture**:
 
 - **Core:** `bci-core/`  
   Contém as classes de domínio principais da aplicação.
@@ -11,25 +27,86 @@
 - **UML diagrams:** `uml/`  
   Contém os diagramas UML da primeira entrega.
 
-⚠️ **Importante:** Os nomes das classes já existentes **não devem ser alterados**.  
-Algumas classes **não podem ser modificadas de forma alguma** — verifica os detalhes nas páginas do curso.
+## 🧠 Design Patterns Used
 
-Nem todo o código precisa de estar completamente funcional em todas as entregas (podem aplicar-se penalizações). Consulta as condições de avaliação no site da disciplina.
+### 🧭 Visitor Pattern
+- Used for advanced search functionality
+- Decouples search logic from domain entities  
+  (`SearchVisitor`, `SearchFilterVisitor`)
+
+### 🔔 Observer Pattern
+- Used in the notification subsystem
+- Enables event-driven updates  
+  (`NotificationService`, `NotificationListener`)
+
+### 🧠 Strategy Pattern
+- Used for user behavior management
+- Dynamic behavior switching  
+  (`NormalBehaviour`, `AbidingBehaviour`, `WrongfulBehaviour`)
+
+### 🏗️ Command Pattern
+- Used extensively in the application layer
+- Each user action is encapsulated as a command  
+  (`DoRegisterUser`, `DoRequestWork`, etc.)
+
+### 🧩 Layered Architecture
+- UI is fully decoupled from business logic
+- Core logic is reusable and UI-agnostic
+
+
+## 📦 Domain Model Highlights (bci-core)
+
+### Works
+- Abstract `Work` class
+- Concrete implementations:
+  - `Book`
+  - `DVD`
+- Associated entities:
+  - `Creator`
+  - `Category`
+
+### Users
+- `User` entity with dynamic behavior
+- Borrowing requests via `Request`
+- Fine management and notifications
+
+### Rules Engine
+Borrowing rules enforced via:
+- `Rule` interface
+- Concrete implementations:
+  - `NoDuplicateRequestRule`
+  - `LimitRequestRule`
+  - `PriceLimitRule`
+  - `NotSuspendedRule`
+  - `NoReferenceWorkRule`
+
+
+## ⚠️ Exception Handling
+
+The system uses **domain-specific exceptions** to ensure robustness and clarity:
+
+- `UserUnknownException`
+- `WorkUnknownException`
+- `RuleNotMetException`
+- `BorrowingRuleFailedException`
+- `UnavailableFileException`
+
+This approach guarantees:
+- Clear error propagation
+- Strong domain boundaries
+- UI-friendly error handling
 
 ---
 
-## Compilação e Execução
+## 🛠️ Build & Run
 
-A compilação de todo o projeto (incluindo a biblioteca **po-uilib**) é feita automaticamente através do `Makefile` principal.  
-Basta executar o seguinte comando na raiz do projeto:
+### Requirements
+- Java 11+
+- `make`
 
-```bash
-make
-```
+### ClASSPATH
+Before running the program, you need to configure the CLASSPATH to include the po-uilib.jar library, which is used for the text-based interface.
 
-Configurar o CLASSPATH
-
-Antes de executar o programa, é necessário configurar o CLASSPATH para incluir a biblioteca po-uilib.jar, usada para a interface textual.
 ```bash
 Em Linux/MacOS:
 export CLASSPATH=.:po-uilib/po-uilib.jar
@@ -40,14 +117,18 @@ Em Windows (PowerShell):
 set CLASSPATH=.;po-uilib\po-uilib.jar
 ```
 
-
-Estas instruções assumem que o ficheiro po-uilib.jar é gerado dentro da pasta po-uilib após a compilação.
-Se estiver noutro local, ajusta o caminho em conformidade.
-
-Podes confirmar se o CLASSPATH está corretamente configurado com:
+### Build
 ```bash
-echo $CLASSPATH
+make
+## Compilação e Execução
+
+The compilation of the entire project (including the po-uilib library) is done automatically through the main Makefile.
+
+```bash
+make
 ```
+
+
 
 
 Se quiseres definir esta configuração permanentemente, adiciona o comando ao teu ficheiro de inicialização (.bashrc, .zshrc, etc.).
